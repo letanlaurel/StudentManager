@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <!-- $符号表示字符串的拼接 容易引起sql注入  ￥符号中 只能用value 不能用其他的值-->
+<mapper namespace="com.tl666.dao.IUserMapper">
+	<!-- 学生登录 -->
+	<select id="studentLogin" parameterType="com.tl666.pojo.Student" resultMap="studentMap">
+	select * from student where username = #{username} and pwd = #{pwd}
+	</select>
+	<resultMap type="com.tl666.pojo.Student" id="studentMap">
+		<id column="id" property="id"/>
+		<result column="name" property="name"/>
+		<result column="sex" property="sex"/>
+		<result column="username" property="username"/>
+		<result column="pwd" property="pwd"/>
+		<result column="phone" property="phone"/>
+		<result column="email" property="email"/>
+		<result column="identity" property="identity"/>
+		<result column="create_time" property="create_time"/>
+		<result column="department_id" property="department_id"/>
+		<result column="achievement_id" property="achievement_id"/>
+		<result column="appendix_id" property="appendix_id"/>
+		<association column="appendix_id" property="appendix" javaType="com.tl666.pojo.Appendix" select="selectAppendix"/>
+		<association column="department_id" property="department" javaType="com.tl666.pojo.Department" select="selectDepartment"/>
+		<collection column="achievement_id" property="achievementList" javaType="List" select="selectAchievement"/>
+	</resultMap>
+	
+	<select id="selectAppendix" resultType="com.tl666.pojo.Appendix">
+	    select * from appendix where id = #{appendix_id}
+	</select>
+	<select id="selectDepartment" resultType="com.tl666.pojo.Department">
+	    select * from department where id = #{department_id}
+	</select>
+	<select id="selectAchievement" resultType="com.tl666.pojo.Achievement">
+	    select * from achievement where id = #{achievement_id}
+	</select>
+	
+	<!-- 教师登录 -->
+	<select id="teacherLogin" parameterType="com.tl666.pojo.Teacher" resultMap="teacherMap">
+	select * from teacher where username = #{username} and pwd = #{pwd}
+	</select>
+	<resultMap type="com.tl666.pojo.Teacher" id="teacherMap">
+		<id column="id" property="id"/>
+		<result column="name" property="name"/>
+		<result column="sex" property="sex"/>
+		<result column="username" property="username"/>
+		<result column="pwd" property="pwd"/>
+		<result column="phone" property="phone"/>
+		<result column="email" property="email"/>
+		<result column="identity" property="identity"/>
+		<result column="create_time" property="create_time"/>
+		<result column="department_id" property="department_id"/>
+		<result column="appendix_id" property="appendix_id"/>
+		<association column="appendix_id" property="appendix" javaType="com.tl666.pojo.Appendix" select="selectAppendix"/>
+		<association column="department_id" property="department" javaType="com.tl666.pojo.Department" select="selectDepartment"/>
+	</resultMap>
+	
+	
+	<select id="getListStudent" resultMap="studentMap">
+	select * from student
+	</select>
+	
+	<select id="getListTeacher" resultMap="teacherMap">
+	select * from teacher
+	</select>
+	
+	<select id="getStudent" resultMap="studentMap">
+	select * from student where id = #{id}
+	</select>
+	
+	<select id="getTeacher" resultMap="teacherMap">
+	select * from teacher where id = #{id}
+	</select>
+	
+	<select id="searchStudent" parameterType="String" resultMap="studentMap">
+	select * from student where username like concat('%',#{text},'%') or name like concat('%',#{text},'%');
+	</select>
+	
+	<select id="searchTeacher" parameterType="String" resultMap="teacherMap">
+	select * from teacher where username like concat('%',#{text},'%') or name like concat('%',#{text},'%');
+	</select>
+	
+	<select id="getDepStudent" parameterType="String" resultMap="studentMap">
+	select * from student where department_id = #{department_id}
+	</select>
+</mapper>

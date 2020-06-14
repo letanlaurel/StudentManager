@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+
+	<!-- 开启对aop注解支持 -->
+	<aop:aspectj-autoproxy />
+	<!-- 开启aop注解扫描 -->
+	<context:component-scan base-package="com.tl666" />
+
+	<!-- 如果请求没有@RequestMapping 就交给Tomcat默认的servlet处理 （直接访问） 如果没有《mvc:annotation-driven/》 
+		就只能访问静态资源 -->
+	<mvc:default-servlet-handler />
+
+	<!-- 开启@RequestMapping 和 直接跳转共存 交给Tomcat默认的servlet处理 （直接访问） -->
+	<mvc:annotation-driven />
+
+	<!-- 视图解析器 -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/jsp/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+	<!-- id 默认为multipartResolver 文件上传配置 -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding" value="UTF-8" />
+		<property name="maxUploadSize" value="10240000" />
+	</bean>
+
+	<mvc:interceptors>
+				<mvc:interceptor>
+					<!-- 表示拦截所以请求 -->
+					<mvc:mapping path="/**"/>
+					<!-- 表示不拦截 -->
+					<mvc:exclude-mapping path="/images/*"/>
+					<mvc:exclude-mapping path="/js/*"/>
+					<mvc:exclude-mapping path="/css/*"/>
+					<mvc:exclude-mapping path="/UserHandler/login"/>
+					<mvc:exclude-mapping path="/UserHandler/loginout"/>
+					<bean class="com.tl666.interceptor.LoginInterceptor"/>
+				</mvc:interceptor>
+				<mvc:interceptor>
+					<!-- 表示拦截所以请求 -->
+					<mvc:mapping path="/UserHandler/showDepStudent"/>
+					<mvc:mapping path="/UserHandler/addStudent"/>
+					<mvc:mapping path="/UserHandler/intoUpdateStudent"/>
+					<mvc:mapping path="/UserHandler/updateStudent"/>
+					<mvc:mapping path="/UserHandler/delStudent"/>
+					<mvc:mapping path="/UserHandler/intoAddAchievement"/>
+					<mvc:mapping path="/UserHandler/addAchievement"/>
+					<mvc:mapping path="/UserHandler/updateAchievement"/>
+					<mvc:mapping path="/UserHandler/delAchievement"/>
+					<mvc:mapping path="/UserHandler/search"/>
+					<mvc:mapping path="/UserHandler/initPwd"/>
+					<!-- 表示不拦截 -->
+					<bean class="com.tl666.interceptor.TeacherInterceptor"/>
+				</mvc:interceptor>
+				<mvc:interceptor>
+					<!-- 表示拦截所以请求 -->
+					<mvc:mapping path="/UserHandler/openTeacherList"/>
+					<mvc:mapping path="/UserHandler/addTeacher"/>
+					<mvc:mapping path="/UserHandler/intoUpdateTeacher"/>
+					<mvc:mapping path="/UserHandler/updateTeacher"/>
+					<mvc:mapping path="/UserHandler/delTeacher"/>
+					<mvc:mapping path="/UserHandler/openDepartmentList"/>
+					<mvc:mapping path="/UserHandler/addDepartment"/>
+					<mvc:mapping path="/UserHandler/delDepartment"/>
+					<mvc:mapping path="/UserHandler/updateDepartment"/>
+					<!-- 表示不拦截 -->
+					<bean class="com.tl666.interceptor.AdminInterceptor"/>
+				</mvc:interceptor>
+		</mvc:interceptors>
+</beans>

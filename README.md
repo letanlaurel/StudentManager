@@ -16,5 +16,8 @@
 
 7.学生和教师可以上传附件
 
-
+ ![image](https://github.com/tl1976087502/StudentManager/blob/master/images/1.png)
+ ![image](https://github.com/tl1976087502/StudentManager/blob/master/images/2.png)
+ ![image](https://github.com/tl1976087502/StudentManager/blob/master/images/3.png)
+ ![image](https://github.com/tl1976087502/StudentManager/blob/master/images/4.png)
 
